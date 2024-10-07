@@ -298,6 +298,7 @@ echo "The current install script has been removed."
 # ║                                            ║
 # ╚═════════════════════╩══════════════════════╝
 
+echo
 echo "Add the public key to your 'backup' repository's ('$GIT_REPO_URL_FOR_SATISFACTORY_BACKUP') deploy keys!"
 echo "In GitHub, go to your repository -> Settings -> Deploy keys -> Add deploy key -> Paste the public key from the file '$SSH_DIR/${PROJECT_NAME}_key.pub' -> Allow write access -> Add key"
 echo "Add as title '$PROJECT_NAME'"
@@ -327,6 +328,7 @@ check_public_key_added() {
 }
 
 check_public_key_added
+echo
 
 echo "Running the Docker container for '$PROJECT_NAME'..."
 docker compose up -d ||
