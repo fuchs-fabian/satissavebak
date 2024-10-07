@@ -1,7 +1,6 @@
-# TODO: Change `example` to the name of the service you want to run and adjust the docker-compose file to your needs
 services:
-  example:
-    container_name: example
+  satissavebak:
+    container_name: satissavebak
     # No image available, build from source
     build:
       context: ./src
@@ -10,6 +9,9 @@ services:
       - LOG_LEVEL
       - CRON_SCHEDULE
       - GIT_REPO_URL_FOR_SIMBASHLOG_NOTIFIER
+      - SATISFACTORY_SAVE_GAMES_PATH
+      - SATISFACTORY_BLUEPRINTS_PATH
+      - GIT_REPO_URL_FOR_SATISFACTORY_BACKUP
     volumes:
       # Logs - Comment out to disable logging to host
       - type: bind
@@ -23,3 +25,18 @@ services:
         target: /root/.config/simbashlog-notifier
         bind:
           create_host_path: true
+      # SSH
+      - type: bind
+        source: ./volumes/ssh
+        target: /root/.ssh
+        read_only: true
+      # Satisfactory Save Games
+      - type: bind
+        source: $SATISFACTORY_SAVE_GAMES_PATH
+        target: /mnt/satisfactory/saves
+        read_only: true
+      # Satisfactory Blueprints
+      - type: bind
+        source: $SATISFACTORY_BLUEPRINTS_PATH
+        target: /mnt/satisfactory/blueprints
+        read_only: true

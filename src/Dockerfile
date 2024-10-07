@@ -61,14 +61,25 @@ RUN mkdir -p /root/.config/simbashlog-notifier
 
 # ╔═════════════════════╦══════════════════════╗
 # ║                                            ║
-# ║                   MAIN                     ║
+# ║                SATISSAVEBAK                ║
 # ║                                            ║
 # ╚═════════════════════╩══════════════════════╝
 
-RUN echo "Installing 'main'..."
+RUN echo "Installing 'satissavebak'..."
 
-COPY main.bash /bin/main.bash
-RUN chmod +x /bin/main.bash
+RUN apt-get install -y \
+    rsync
+
+RUN git config --global user.name "satissavebak" && \
+    git config --global user.email "satissavebak@bot.local"
+
+RUN mkdir -p /root/.ssh
+RUN mkdir -p /src/git
+RUN mkdir -p /mnt/satisfactory/saves
+RUN mkdir -p /mnt/satisfactory/blueprints
+
+COPY satissavebak.bash /bin/satissavebak.bash
+RUN chmod +x /bin/satissavebak.bash
 
 # ╔═════════════════════╦══════════════════════╗
 # ║                                            ║

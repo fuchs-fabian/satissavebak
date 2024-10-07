@@ -111,7 +111,6 @@ log debug "Checking if 'GIT_REPO_URL_FOR_SIMBASHLOG_NOTIFIER' is set..."
 if [ -z "$GIT_REPO_URL_FOR_SIMBASHLOG_NOTIFIER" ]; then
     log warn "Git repository URL for 'simbashlog' notifier not set. Therefore, no notifications will be sent."
 
-    # TODO: Remove the following line if you still need python
     uninstall_python
 else
     PYTHON_PACKAGES_BEFORE_INSTALL=$(pip freeze)
@@ -142,32 +141,45 @@ else
             log info "Uninstalled python package: $package"
         done
 
-        # TODO: Remove the following line if you still need python
         uninstall_python
     fi
 fi
 
 # ╔═════════════════════╦══════════════════════╗
 # ║                                            ║
-# ║                   MAIN                     ║
+# ║               SATISSAVEBAK                 ║
 # ║                                            ║
 # ╚═════════════════════╩══════════════════════╝
 
-# TODO: Adjust the current section to your needs, but the following variables are required: `SCRIPT_NAME_WITHOUT_EXTENSION`, `CRON_JOB_COMMAND`
+SATISSAVEBAK_BIN="/bin/satissavebak.bash"
 
-MAIN_BIN="/bin/main.bash"
-
-SCRIPT_NAME_WITHOUT_EXTENSION="main"
-
-log debug "Checking if '$MAIN_BIN' is executable..."
-if [ ! -f "$MAIN_BIN" ]; then
-    log error "'$MAIN_BIN' not found"
+log debug "Checking if '$SATISSAVEBAK_BIN' is executable..."
+if [ ! -f "$SATISSAVEBAK_BIN" ]; then
+    log error "'$SATISSAVEBAK_BIN' not found"
 fi
 
+log debug "Checking if 'GIT_REPO_URL_FOR_SATISFACTORY_BACKUP' is set..."
+if [ -z "$GIT_REPO_URL_FOR_SATISFACTORY_BACKUP" ]; then
+    log error "Git repository URL not set"
+fi
+
+log debug "Moving to '/src/git' directory..."
+if ! cd /src/git; then
+    log error "Git directory not found"
+fi
+
+log info "Cloning repository '$GIT_REPO_URL_FOR_SATISFACTORY_BACKUP'..."
+git clone "$GIT_REPO_URL_FOR_SATISFACTORY_BACKUP" ||
+    log error "Failed to clone repository '$GIT_REPO_URL_FOR_SATISFACTORY_BACKUP'"
+
+SCRIPT_NAME_WITHOUT_EXTENSION=$(basename "$GIT_REPO_URL_FOR_SATISFACTORY_BACKUP" .git)
+
+GIT_REPO_PATH="/src/git/$SCRIPT_NAME_WITHOUT_EXTENSION"
+
 if [ -n "$NOTIFIER" ]; then
-    CRON_JOB_COMMAND="$MAIN_BIN \"$LOG_LEVEL\" \"$NOTIFIER\""
+    CRON_JOB_COMMAND="$SATISSAVEBAK_BIN \"$LOG_LEVEL\" \"$GIT_REPO_PATH\" \"$NOTIFIER\""
 else
-    CRON_JOB_COMMAND="$MAIN_BIN \"$LOG_LEVEL\""
+    CRON_JOB_COMMAND="$SATISSAVEBAK_BIN \"$LOG_LEVEL\" \"$GIT_REPO_PATH\""
 fi
 
 # ╔═════════════════════╦══════════════════════╗

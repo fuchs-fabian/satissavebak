@@ -1,4 +1,4 @@
-# `simbashlog-debian-docker-template`: Template for Debian Docker containers with [`simbashlog`](https://github.com/fuchs-fabian/simbashlog)
+# `satissavebak`: Backup your Satisfactory with GIT
 
 <p align="center">
   <a href="./LICENSE">
@@ -7,25 +7,27 @@
 </p>
 
 <div align="center">
-  <a href="https://github.com/fuchs-fabian/simbashlog-debian-docker-template">
-    <img src="https://github-readme-stats.vercel.app/api/pin/?username=fuchs-fabian&repo=simbashlog-debian-docker-template&theme=holi&hide_border=true&border_radius=10" alt="Repository simbashlog-debian-docker-template"/>
+  <a href="https://github.com/fuchs-fabian/satissavebak">
+    <img src="https://github-readme-stats.vercel.app/api/pin/?username=fuchs-fabian&repo=satissavebak&theme=holi&hide_border=true&border_radius=10" alt="Repository satissavebak"/>
   </a>
 </div>
 
 ## Description
 
-<!--
-TODO: Add a short description of the repository.
--->
+This docker container is used to backup your Satisfactory save games and blueprints with GIT.
 
-This template is intended to be used as a basis for creating a new Docker container with `simbashlog` and `cronjob` support. The container is based on `Debian`.
+> It is intended to be used on a Linux server.
+
+## ⚠️ **Disclaimer - Important!**
+
+Be sure to use a repository that is not intended for the productive development of projects. Here, the git history is cleaned up via cronjob so that the git repository does not become so large. The latest backup is then always stored here.
 
 ## Getting Started
 
 Simply run the install script. You will be guided through the installation.
 
 ```shell
-wget https://raw.githubusercontent.com/fuchs-fabian/simbashlog-debian-docker-template/refs/heads/main/install.sh
+wget https://raw.githubusercontent.com/fuchs-fabian/satissavebak/refs/heads/main/install.sh
 ```
 
 ```shell
@@ -39,6 +41,12 @@ chmod +x install.sh
 As the [simbashlog-notifier](https://github.com/fuchs-fabian/simbashlog-notifiers) does not work straight away, the container must be shut down and then the configuration file under `volumes/config/` must be adapted.
 
 If a notifier is used that requires additional files, these must be created on the host and mounted. Alternatively, the files can also be created in the container if the corresponding bind mounts have been set beforehand.
+
+To do this, simply enter the container:
+
+```shell
+docker exec -it satissavebak /bin/bash
+```
 
 If the cronjob schedule or other settings are to be adjusted, the Docker container must be shut down briefly and the `.env` file adjusted:
 
